@@ -33,10 +33,33 @@ if __name__ == '__main__':
         i += 1
         # temp_list.clear()  # เอาไว้ตรงนี้ไม่ได้ ไม่รู้ทำไม
 
-    # print(keyCode)
-    # for i in range(65, 84):
-    #     print(chr(i))
-    # print(ord(' '), ord('z'), ord('ก'), ord('ฮ'))
+    # en_puma test
+    # en_puma_keyCode = list(range(65, 90+1)) + list(range(97, 122+1)) + [32, 39, 44, 45, 46]
+    non_shift = list(range(97, 122+1)) + [32, 39, 45, 44, 46]
+    # print(en_puma_keyCode, len(en_puma_keyCode))
+    temp_list = []
+    # print(len(keyCode['en_puma']))
     for code in keyCode['en_puma']:
-        print(code, chr(code))
-    print(len(keyCode['en_puma']))
+        if code not in non_shift:
+            # print(code, chr(code))
+            temp_list.append(16)
+            temp_list.append(code)
+        else:
+            temp_list.append(code)
+    keyCode['en_puma'] = temp_list
+    # print(keyCode['en_puma'])
+    # print(len(keyCode['en_puma']))
+
+    # th_font_test test
+    th_font_test_keyCode = list(range(3585, 3660+1)) + [10, 32]
+    # print(th_font_test_keyCode, len(th_font_test_keyCode))
+    # for code in keyCode['th_font_test']:
+    #     if code in th_font_test_keyCode:
+    #         print(code, chr(code))
+
+    # th_breakfast
+    for code in keyCode['th_breakfast']:
+        if code in th_font_test_keyCode:
+            print(code, chr(code))
+
+    # print(keyCode['th_breakfast'])
