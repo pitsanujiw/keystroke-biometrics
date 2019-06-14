@@ -5,7 +5,7 @@ import operator
 from scipy.spatial.distance import euclidean
 from fastdtw import fastdtw
 import time
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def loadDataset(path, typeSet):
     dataset = []

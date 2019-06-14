@@ -6,7 +6,7 @@ from scipy.spatial.distance import euclidean
 from fastdtw import fastdtw
 import time
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import scipy.fftpack
 
 def loadDataset(path, ngram):

@@ -56,20 +56,22 @@ def printData(data):
 #     read_data = json.load(data)
 # print(read_data)
 
-data_name = "en_puma"
+# data_name = "en_puma"
 
-read_path = "raw_data\\en\\query\\*.json"
+types = "templete"
+
+read_path = "raw_data\\en\\"+types+"\\*.json"
 files = glob.glob(read_path)
 
-write_path = "new_data\\en\\query\\"
+write_path = "new_data\\en_puma\\"+types+"\\"
 
 for file_name in files:
     with open(file_name) as files:
         read_data = json.load(files)
 
-    # name = file_name[file_name.find("_")+1:file_name.rfind("_")]
-    # write_data = new_json(read_data, name)
-    checking(read_data)
+    name = file_name[file_name.rfind("\\")+1:]
+    write_data = checking(read_data)
+    # checking(read_data)
 
-    # name = file_name[file_name.find("_")-2:file_name.rfind("_")]
-    # write2json(write_data, write_path + name + ".json")
+    write2json(write_data, write_path + name)
+    # print(write_path + name)
