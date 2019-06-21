@@ -16,30 +16,20 @@ def load_data_set(path, ngram):
         i += 1
     return dataset
 
-def getNeighbors(training_set, testInstance, k):
+def getNeighbors(trainingSet, testInstance, k):
     distances = []
-    for x in range(len(training_set)):
-        dist, path = fastdtw(testInstance[1], training_set[x][1], dist=euclidean)
-        distances.append((training_set[x][0], dist))
+    for x in range(len(trainingSet)):
+        dist, path = fastdtw(testInstance[1], trainingSet[x][1], dist=euclidean)
+        distances.append((trainingSet[x][0], dist))
     distances.sort(key=operator.itemgetter(1))
     return distances
  
-def getAccuracy(test_set, predictions):
+def getAccuracy(testSet, predictions):
     correct = 0
-    for x in range(len(test_set)):
-        if test_set[x][0] == predictions[x]:
+    for x in range(len(testSet)):
+        if testSet[x][0] == predictions[x]:
             correct += 1
-    return (correct/float(len(test_set))) * 100.0
-
-def mappingIndex(data):
-    mapping = []
-    for x in range(len(data)):
-        mapping.append([data[x], x])
-    mapping.sort()
-    data.clear()
-    for x in mapping:
-        data.append(x[1])
-    return data
+    return (correct/float(len(testSet))) * 100.0
 
 def experiment(attribute, dataset, experiment_type):
     # prepare data
@@ -60,14 +50,6 @@ def experiment(attribute, dataset, experiment_type):
     print("training set number: " + str(len(test_set)))
     print("test set number: " + str(len(training_set)))
 
-    # mapping
-        # test_set
-    for i in range(len(test_set)):
-        mappingIndex(test_set[i][1])
-        # training_set
-    for i in range(len(training_set)):
-        mappingIndex(training_set[i][1])
-
     # generate predictions
     predictions=[]
     k = 1
@@ -84,12 +66,12 @@ def experiment(attribute, dataset, experiment_type):
     print("----------------------------------------------------\n")
 
 # [non-fourier_non-mapping, non-fourier_mapping, fourier_non-mapping, fourier_mapping]
-experiment_type = "non-fourier_mapping"
+experiment_type = "non-fourier_non-mapping"
 # [typo_data_set, non-typo_data_set]
 data_set_type = "cut_non_typo_data_set"
-# [en_puma, th_font_test, th_breakfast]
+# ["en_puma", "th_font_test", "th_breakfast"]
 data_set_names = ["en_puma", "th_font_test", "th_breakfast"]
-attributes = ["5gram", "4gram", "3gram", "2gram", "1gram", "duration", "keyPressed", "keyReleased"]
+attributes = ["5gram", "4gram", "3gram", "2gram", "1gram", "duration"] #  "keyPressed", "keyReleased"
 
 for data_set_name in data_set_names:
     for attribute in attributes:
