@@ -3,6 +3,8 @@ import json
 import glob
 from fastdtw import fastdtw
 from scipy.spatial.distance import euclidean
+from scipy.spatial import distance
+from scipy.stats import pearsonr
 import operator
 import numpy as np
 
@@ -20,10 +22,22 @@ def load_data_set(path, ngram):
 def getNeighbors(trainingSet, testInstance, k):
     distances = []
     for x in range(len(trainingSet)):
+        # mapping
+        # test_set
+        for i in range(len(testInstance[1])):
+            map_test = mappingIndex(testInstance[1])
+            # training_set
+        for i in range(len(testInstance[1])):
+            map_train = mappingIndex(trainingSet[x][1])
         # fourier is here
-        f_test = np.fft.irfft(testInstance[1])
-        f_train = np.fft.irfft(trainingSet[x][1])
+        f_test = np.fft.irfft(map_test)
+        f_train = np.fft.irfft(map_train)
+        # dtw
         dist, path = fastdtw(np.abs(f_test), np.abs(f_train), dist=euclidean)
+        # euclid
+        # dist = distance.euclidean(f_test, f_train)
+        # pearson
+        # dist, p_value = pearsonr(testInstance[1], trainingSet[x][1])
         distances.append((trainingSet[x][0], dist))
     distances.sort(key=operator.itemgetter(1))
     return distances
@@ -64,14 +78,6 @@ def experiment(attribute, dataset, experiment_type):
     print("training set number: " + str(len(test_set)))
     print("test set number: " + str(len(training_set)))
 
-    # mapping
-        # test_set
-    for i in range(len(test_set)):
-        mappingIndex(test_set[i][1])
-        # training_set
-    for i in range(len(training_set)):
-        mappingIndex(training_set[i][1])
-
     # generate predictions
     predictions=[]
     k = 1
@@ -87,10 +93,10 @@ def experiment(attribute, dataset, experiment_type):
     print("Time used: " + str(end-start) + " seconds.")
     print("----------------------------------------------------\n")
 
-# [non-fourier_non-mapping, non-fourier_mapping, fourier_non-mapping, fourier_mapping]
-experiment_type = "fourier_mapping"
-# [typo_data_set, non-typo_data_set]
-data_set_type = "non-typo_data_set"
+# [dtw-fourier_mapping, dtw-mapping_fourier, euclid-fourier_mapping, pearson-fourier_mapping]
+experiment_type = "dtw-mapping_fourier"
+# [typo_data_set, non-typo_data_set, cut_non_typo_data_set]
+data_set_type = "typo_data_set"
 # [en_puma, th_font_test, th_breakfast]
 data_set_names = ["en_puma", "th_font_test", "th_breakfast"]
 attributes = ["5gram", "4gram", "3gram", "2gram", "1gram", "duration", "keyPressed", "keyReleased"] # 
