@@ -3,6 +3,8 @@ import json
 import glob
 from fastdtw import fastdtw
 from scipy.spatial.distance import euclidean
+from scipy.spatial import distance
+from scipy.stats import pearsonr
 import operator
 import numpy as np
 
@@ -23,7 +25,11 @@ def getNeighbors(trainingSet, testInstance, k):
         # fourier is here
         f_test = np.fft.irfft(testInstance[1])
         f_train = np.fft.irfft(trainingSet[x][1])
-        dist, path = fastdtw(np.abs(f_test), np.abs(f_train), dist=euclidean)
+        # dtw
+        # dist, path = fastdtw(np.abs(f_test), np.abs(f_train), dist=euclidean)
+        # dist = distance.euclidean(f_test, f_train)
+        # pearson
+        dist, p_value = pearsonr(testInstance[1], trainingSet[x][1])
         distances.append((trainingSet[x][0], dist))
     distances.sort(key=operator.itemgetter(1))
     return distances
@@ -69,13 +75,13 @@ def experiment(attribute, dataset, experiment_type):
     print("Time used: " + str(end-start) + " seconds.")
     print("----------------------------------------------------\n")
 
-# [non-fourier_non-mapping, non-fourier_mapping, fourier_non-mapping, fourier_mapping]
-experiment_type = "fourier_non-mapping"
-# [typo_data_set, non-typo_data_set]
+# [fourier_non-mapping, euclid-fourier_non-mapping, pearson-fourier_non-mapping]
+experiment_type = "pearson-fourier_non-mapping"
+# [typo_data_set, non-typo_data_set, cut_non_typo_data_set]
 data_set_type = "cut_non_typo_data_set"
 # [en_puma, th_font_test, th_breakfast]
 data_set_names = ["en_puma", "th_font_test", "th_breakfast"]
-attributes = ["5gram", "4gram", "3gram", "2gram", "1gram", "duration"] # "keyPressed", "keyReleased"
+attributes = ["5gram", "4gram", "3gram", "2gram", "1gram", "duration", "keyPressed", "keyReleased"] # 
 
 for data_set_name in data_set_names:
     for attribute in attributes:

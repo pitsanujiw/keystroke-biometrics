@@ -23,8 +23,25 @@ def checking(read_data):
         read_data['keyPressed'].pop(index-1)
         read_data['keyReleased'].pop(index-1)
         read_data['keyReleased'].pop(index-1)
+    for i in range(1, 6):
+        read_data[str(i)+"gram"] = cal_ngram(i, read_data["keyPressed"], read_data["keyReleased"])
+    read_data["duration"] = cal_duration(read_data["keyPressed"], read_data["keyReleased"])
     check_length(read_data)
     return read_data
+
+def cal_ngram(ngram, pressed, released):
+    length = len(pressed)
+    result = []
+    for i in range(0, length-ngram, ngram):
+        result.append(abs(released[i]-pressed[i+ngram]))
+    return result
+
+def cal_duration(pressed, released):
+    length = len(pressed)
+    result = []
+    for i in range(length):
+        result.append(abs(released[i]-pressed[i]))
+    return result
 
 def check_length(read_data):
     if len(read_data['keyCode']) == len(read_data['keyPressed']) == len(read_data['keyReleased']):
@@ -59,11 +76,12 @@ def printData(data):
 # data_name = "en_puma"
 
 types = "templete"
+article = "th_breakfast"
 
-read_path = "raw_data\\en\\"+types+"\\*.json"
+read_path = "raw_data\\"+article+"\\"+types+"\\*.json"
 files = glob.glob(read_path)
 
-write_path = "new_data\\en_puma\\"+types+"\\"
+write_path = "new_data\\"+article+"\\"+types+"\\"
 
 for file_name in files:
     with open(file_name) as files:
